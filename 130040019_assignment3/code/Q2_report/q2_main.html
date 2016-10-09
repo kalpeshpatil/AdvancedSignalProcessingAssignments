@@ -1,0 +1,494 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>EE 779: Assignment 1: Q.2</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-09-27"><meta name="DC.source" content="q2_main.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>EE 779: Assignment 1: Q.2</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Kalpesh Patil</a></li><li><a href="#2">130040019</a></li><li><a href="#3">Q2 (a): periodogra for K = 0.01</a></li><li><a href="#4">Q2 (b) Spectral Estimates for following methods</a></li><li><a href="#5">(i)  : AR model autocorrelation ( p = 7 )</a></li><li><a href="#6">(ii) : AR model covariance ( p = 7 )</a></li><li><a href="#7">(iii): MUSIC method (8*8 covariance method matrix)</a></li><li><a href="#8">(iv) : Minimum Norm method (8*8 covariance method matrix)</a></li><li><a href="#9">All plots combined</a></li><li><a href="#10">Comparison of different methods</a></li></ul></div><h2>Kalpesh Patil<a name="1"></a></h2><h2>130040019<a name="2"></a></h2><pre class="codeinput">close <span class="string">all</span>
+clear <span class="string">all</span>
+
+<span class="comment">% read input data</span>
+I01 = getdata(<span class="string">'../assgn3_data/I01.dat'</span>)';
+I10 = getdata(<span class="string">'../assgn3_data/I10.dat'</span>)';
+I40 = getdata(<span class="string">'../assgn3_data/I40.dat'</span>)';
+R01 = getdata(<span class="string">'../assgn3_data/R01.dat'</span>)';
+R10 = getdata(<span class="string">'../assgn3_data/R10.dat'</span>)';
+R40 = getdata(<span class="string">'../assgn3_data/R40.dat'</span>)';
+
+x01 = R01 + I01*1i;
+x10 = R10 + I10*1i;
+x40 = R40 + I40*1i;
+
+x_list = [x01,x10,x40];
+k_list = [0.01,0.10,0.40];
+</pre><h2>Q2 (a): periodogra for K = 0.01<a name="3"></a></h2><p>Note that complex exponentials are used in input signal hence plots are shown for -pi to pi instead of just 0 to pi</p><pre class="codeinput">fft_len = 1024;
+N = length(x01);
+<span class="comment">% zero padding signal</span>
+x_padded = zeros(fft_len,1);
+x_padded(1:N) = x01(1:N);
+fft_xN = fftshift(fft(x_padded, fft_len));
+freq = linspace(-pi,pi,fft_len);
+prdgrm_psd_x01 = (abs(fft_xN).^2)/N;
+fig = figure;
+plot(freq,10*log10(prdgrm_psd_x01));
+title(<span class="string">'PSD estimate of x01 periodogram method'</span>);
+xlabel(<span class="string">'w'</span>);
+ylabel(<span class="string">'PSD(dB)'</span>)
+set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+set(gca,<span class="string">'xtick'</span>,[-pi,0,3*pi/8,pi/2,5*pi/8,pi]);
+set(gca,<span class="string">'xgrid'</span>,<span class="string">'on'</span>);
+saveas(fig,<span class="string">'../results/Q2/PSD estimate of x01 periodogram method'</span>,<span class="string">'jpg'</span>);
+</pre><img vspace="5" hspace="5" src="q2_main_01.png" alt=""> <h2>Q2 (b) Spectral Estimates for following methods<a name="4"></a></h2><h2>(i)  : AR model autocorrelation ( p = 7 )<a name="5"></a></h2><pre class="language-matlab">
+<span class="keyword">function</span> [psd_AR,freq] = AR_autocorrelation_spectrum(x,p,K)
+r = find_correlation(x);
+[X,Rxx_autocorr_AR] = corrmtx(x,p,<span class="string">'autocorrelation'</span>);
+<span class="comment">%Rxx_autocorr_AR = X'*X;</span>
+temp = Rxx_autocorr_AR(2:end,2:end);
+r_AR = -r(2:p+1);
+a_AR = temp\r_AR;
+a_AR = [1,a_AR.'].';
+error_sq_AR = 0;
+<span class="keyword">for</span> j = 1:p+1
+   error_sq_AR = error_sq_AR + a_AR(j)*conj(r(j));
+<span class="keyword">end</span>
+
+error_AR = sqrt(abs(error_sq_AR));
+
+[h,w] = freqz(error_AR,a_AR,<span class="string">'whole'</span>,1024);
+psd_AR = abs(fftshift(h)).^2;
+freq = w - pi;
+<span class="keyword">end</span>
+
+</pre><pre class="codeinput"><span class="keyword">for</span> k = 1:length(k_list)
+    x = x_list(:,k);
+    [AR_autocorr_psd,freq] = AR_autocorrelation_spectrum(x,7,k_list(k));
+    fig = figure;
+    plot(freq,10*log10(AR_autocorr_psd));
+    title([<span class="string">'PSD estimate Autocorrelation method x'</span>,num2str(k_list(k))]);
+    xlabel(<span class="string">'w'</span>);
+    ylabel(<span class="string">'PSD(dB)'</span>);
+    set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+    set(gca,<span class="string">'xtick'</span>,[-pi,0,3*pi/8,pi/2,5*pi/8,pi]);
+    set(gca,<span class="string">'xgrid'</span>,<span class="string">'on'</span>);
+    saveas(fig,[<span class="string">'../results/Q2/'</span>,<span class="string">'PSD estimate Autocorrelation method x'</span>,num2str(k_list(k))],<span class="string">'jpg'</span>);
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="q2_main_02.png" alt=""> <img vspace="5" hspace="5" src="q2_main_03.png" alt=""> <img vspace="5" hspace="5" src="q2_main_04.png" alt=""> <h2>(ii) : AR model covariance ( p = 7 )<a name="6"></a></h2><pre class="language-matlab">
+<span class="keyword">function</span> [psd_covar,freq] = AR_covariance_spectrum(x,p,K)
+N = length(x);
+
+X = corrmtx(x,p,<span class="string">'covariance'</span>);
+Rxx_covar = X'*X;
+temp = Rxx_covar(2:length(Rxx_covar),2:length(Rxx_covar));
+r_covar = -Rxx_covar(2:end,1);
+a_covar = inv(temp)*r_covar;
+a_covar = [1,a_covar.'].';
+error_sq_covar = 0;
+<span class="keyword">for</span> j = 1:p+1
+   error_sq_covar = error_sq_covar + a_covar(j)*conj(Rxx_covar(j,1));
+<span class="keyword">end</span>
+
+error_covar = sqrt(abs(error_sq_covar));
+
+[h,w] = freqz(1,a_covar,<span class="string">'whole'</span>,1024);
+psd_covar = abs(fftshift(h)).^2;
+freq = w - pi;
+<span class="keyword">end</span>
+
+</pre><pre class="codeinput"><span class="keyword">for</span> k = 1:length(k_list)
+    x = x_list(:,k);
+    [AR_covar_psd,freq] = AR_covariance_spectrum(x,7,k_list(k));
+    fig = figure;
+    plot(freq,10*log10(AR_covar_psd));
+    title([<span class="string">'PSD estimate covariance method x'</span>,num2str(k_list(k))]);
+    xlabel(<span class="string">'w'</span>);
+    ylabel(<span class="string">'PSD(dB)'</span>);
+    set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+    set(gca,<span class="string">'xtick'</span>,[-pi,0,3*pi/8,pi/2,5*pi/8,pi]);
+    set(gca,<span class="string">'xgrid'</span>,<span class="string">'on'</span>);
+    saveas(fig,[<span class="string">'../results/Q2/'</span>,<span class="string">'PSD estimate covariance method x'</span>,num2str(k_list(k))],<span class="string">'jpg'</span>);
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="q2_main_05.png" alt=""> <img vspace="5" hspace="5" src="q2_main_06.png" alt=""> <img vspace="5" hspace="5" src="q2_main_07.png" alt=""> <h2>(iii): MUSIC method (8*8 covariance method matrix)<a name="7"></a></h2><pre class="language-matlab">
+<span class="keyword">function</span> [MUSIC_psd,freq] = MUSIC_spectrum(x,M,P,K)
+
+N = length(x);
+Rxx_covar = zeros(M+1,M+1);
+
+<span class="keyword">for</span> i = 0:M
+    <span class="keyword">for</span> j = 0:M
+        sum = 0;
+        <span class="keyword">for</span> n = M+1:N
+            sum = sum + x(n-j)*conj(x(n-i));            
+        <span class="keyword">end</span>
+        Rxx_covar(j+1,i+1) = sum;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+X = corrmtx(x,M,<span class="string">'covariance'</span>);
+Rxx_covar = X'*X;
+
+M = length(Rxx_covar(:,1));
+[V,lambda] = eig(Rxx_covar);
+spectrum_len = 1024;
+freq = linspace(-pi,pi,spectrum_len);
+sum_denom = zeros(1,spectrum_len);
+<span class="keyword">for</span> j = 1:length(freq)
+    w = freq(j); 
+    sum_temp = 0;
+    <span class="keyword">for</span> i = 1:M-P
+        v_i = V(:,i);
+        temp = 0;
+        <span class="keyword">for</span> k = 1:M
+            temp = temp + (exp(-1i*(k-1)*w))*v_i(k);
+        <span class="keyword">end</span>
+        sum_temp = sum_temp + (abs(temp))^2;
+    <span class="keyword">end</span>
+    sum_denom(j) = sum_temp;
+<span class="keyword">end</span>
+MUSIC_psd = 1./sum_denom;
+MUSIC_psd = MUSIC_psd';
+<span class="keyword">end</span>
+
+
+</pre><pre class="codeinput"><span class="keyword">for</span> k = 1:length(k_list)
+    x = x_list(:,k);
+    [MUSIC_psd,freq] = MUSIC_spectrum(x,7,3,k_list(k));
+    fig = figure;
+    plot(freq,10*log10(MUSIC_psd));
+    title([<span class="string">'PSD estimate MUSIC method x'</span>,num2str(k_list(k))]);
+    xlabel(<span class="string">'w'</span>);
+    ylabel(<span class="string">'PSD(dB)'</span>);
+    set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+    set(gca,<span class="string">'xtick'</span>,[-pi,0,3*pi/8,pi/2,5*pi/8,pi]);
+    set(gca,<span class="string">'xgrid'</span>,<span class="string">'on'</span>);
+    saveas(fig,[<span class="string">'../results/Q2/'</span>,<span class="string">'PSD estimate MUSIC method x'</span>,num2str(k_list(k))],<span class="string">'jpg'</span>);
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="q2_main_08.png" alt=""> <img vspace="5" hspace="5" src="q2_main_09.png" alt=""> <img vspace="5" hspace="5" src="q2_main_10.png" alt=""> <h2>(iv) : Minimum Norm method (8*8 covariance method matrix)<a name="8"></a></h2><pre class="language-matlab">
+<span class="keyword">function</span> [minimum_norm_psd,freq] = minimum_norm_spectrum(x,M,P,K)
+N = length(x);
+Rxx_covar = zeros(M+1,M+1);
+
+<span class="keyword">for</span> i = 0:M
+    <span class="keyword">for</span> j = 0:M
+        sum = 0;
+        <span class="keyword">for</span> n = M+1:N
+            sum = sum + x(n-j)*conj(x(n-i));            
+        <span class="keyword">end</span>
+        Rxx_covar(j+1,i+1) = sum;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+X = corrmtx(x,M,<span class="string">'covariance'</span>);
+Rxx_covar = X'*X;
+
+M = length(Rxx_covar(:,1));
+[V,lambda] = eig(Rxx_covar);
+V_noise = V(:,1:M-P);
+u = zeros(1,M)';
+u(1) = 1;
+
+num = (V_noise*V_noise')*u;
+den = u'*(V_noise*V_noise')*u;
+a = num./den;
+
+spectrum_len = 1024;
+freq = linspace(-pi,pi,spectrum_len);
+sum_denom = zeros(1,spectrum_len);
+
+
+<span class="keyword">for</span> j = 1:length(freq)
+    w = freq(j); 
+    sum_temp = 0;
+    <span class="keyword">for</span> k = 1:M
+        sum_temp = sum_temp + (exp(-1i*(k-1)*w))*a(k);
+    <span class="keyword">end</span>
+    sum_denom(j) = (abs(sum_temp))^2;
+<span class="keyword">end</span>
+
+minimum_norm_psd = 1./sum_denom;
+
+
+minimum_norm_psd = minimum_norm_psd';
+
+<span class="keyword">end</span>
+
+
+</pre><pre class="codeinput"><span class="keyword">for</span> k = 1:length(k_list)
+    x = x_list(:,k);
+    [minimum_norm_psd,freq] = minimum_norm_spectrum(x,7,3,k_list(k));
+    fig = figure;
+    plot(freq,10*log10(minimum_norm_psd));
+    title([<span class="string">'PSD estimate minimum norm method x'</span>,num2str(k_list(k))]);
+    xlabel(<span class="string">'w'</span>);
+    ylabel(<span class="string">'PSD(dB)'</span>);
+    set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+    set(gca,<span class="string">'xtick'</span>,[-pi,0,3*pi/8,pi/2,5*pi/8,pi]);
+    set(gca,<span class="string">'xgrid'</span>,<span class="string">'on'</span>);
+    saveas(fig,[<span class="string">'../results/Q2/'</span>,<span class="string">'PSD estimate minimum norm method x'</span>,num2str(k_list(k))],<span class="string">'jpg'</span>);
+
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="q2_main_11.png" alt=""> <img vspace="5" hspace="5" src="q2_main_12.png" alt=""> <img vspace="5" hspace="5" src="q2_main_13.png" alt=""> <h2>All plots combined<a name="9"></a></h2><p>Here all the plots are scaled for comparison.</p><pre class="codeinput"><span class="keyword">for</span> k = 1:length(k_list)
+    x = x_list(:,k);
+
+    [AR_autocorr_psd,freq] = AR_autocorrelation_spectrum(x,7,k_list(k));
+    AR_autocorr_psd= (AR_autocorr_psd-min(AR_autocorr_psd))./(max(AR_autocorr_psd)-min(AR_autocorr_psd));
+    [AR_covar_psd,freq] = AR_covariance_spectrum(x,7,k_list(k));
+    AR_covar_psd = (AR_covar_psd-min(AR_covar_psd))./(max(AR_covar_psd)-min(AR_covar_psd));
+    [MUSIC_psd,freq] = MUSIC_spectrum(x,7,3,k_list(k));
+    MUSIC_psd = (MUSIC_psd-min(MUSIC_psd))./(max(MUSIC_psd)-min(MUSIC_psd));
+    [minimum_norm_psd,freq] = minimum_norm_spectrum(x,7,3,k_list(k));
+    minimum_norm_psd = (minimum_norm_psd-min(minimum_norm_psd))./(max(minimum_norm_psd)-min(minimum_norm_psd));
+
+    prdgrm_psd_x01 = (prdgrm_psd_x01 - min(prdgrm_psd_x01))./(max(prdgrm_psd_x01)-min(prdgrm_psd_x01));
+
+    all_plots = 10*log([prdgrm_psd_x01,AR_autocorr_psd,AR_covar_psd,MUSIC_psd,minimum_norm_psd]);
+    fig = figure;
+    plot(freq,all_plots);
+    title([<span class="string">'Relative PSD plots for x'</span>,num2str(k_list(k))]);
+    xlabel(<span class="string">'w'</span>);
+    ylabel(<span class="string">'PSD(dB)'</span>);
+    lgnd = legend(<span class="string">'Periodogram (base)'</span>,<span class="string">'AR autocorrelation'</span>,<span class="string">'AR covariance'</span>,<span class="string">'MUSIC'</span>,<span class="string">'Minimum norm'</span>);
+    lgnd.Orientation = <span class="string">'horizontal'</span>;
+    lgnd.Location = <span class="string">'south'</span>;
+    set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+    set(gca,<span class="string">'xtick'</span>,[-pi,0,3*pi/8,pi/2,5*pi/8,pi]);
+    set(gca,<span class="string">'xgrid'</span>,<span class="string">'on'</span>);
+    saveas(fig,[<span class="string">'../results/Q2/'</span>,<span class="string">'Relative PSD plots for x'</span>,num2str(k_list(k))],<span class="string">'jpg'</span>);
+
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="q2_main_14.png" alt=""> <img vspace="5" hspace="5" src="q2_main_15.png" alt=""> <img vspace="5" hspace="5" src="q2_main_16.png" alt=""> <h2>Comparison of different methods<a name="10"></a></h2><div><ul><li>AR autocorrelation method is not able to capture all three frequencies for any value of noise. It is not suitable for distinguishing closely spaced frequencies.</li><li>For the lesser values of noise (0.01), AR covariance, MUSIC and minimum norm all three work well and produce peaks at given frequencies</li><li>For the larger values of noise (0.4), AR covarianc is not able to capture the middle peak. Also the quality of peaks produced MUSIC method decreases. Minimum norm method prodcues better peaks compared to others for higher values of noise</li><li>We also observe deviation of peaks from ideal input frequencies (which are displayed as vertical lines in PSD plots). The deviation is observed to increase as noise increases. Deviation from actual frequencies: Minimum norm &lt; MUSIC &lt; AR covariance &lt; AR autocorrelation</li><li>Energy in sidelobes (bands other other than peaks) can also be compared to observe quality of peaks. Quality of peaks degrade with amount of noise. Also it depends on different methods. Energy in sidelobes: Minimum norm &lt; MUSIC &lt; AR covariance &lt; AR autocorrelation</li><li>Overall performance for frequency estimation in line spectrum is:   Minimum norm &gt; MUSIC &gt; AR covariance &gt; AR autocorrelation</li></ul></div><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% EE 779: Assignment 1: Q.2
+%%% Kalpesh Patil
+%%% 130040019
+
+
+close all 
+clear all
+
+% read input data
+I01 = getdata('../assgn3_data/I01.dat')';
+I10 = getdata('../assgn3_data/I10.dat')';
+I40 = getdata('../assgn3_data/I40.dat')';
+R01 = getdata('../assgn3_data/R01.dat')';
+R10 = getdata('../assgn3_data/R10.dat')';
+R40 = getdata('../assgn3_data/R40.dat')';
+
+x01 = R01 + I01*1i;
+x10 = R10 + I10*1i;
+x40 = R40 + I40*1i;
+
+x_list = [x01,x10,x40];
+k_list = [0.01,0.10,0.40];
+
+%% Q2 (a): periodogra for K = 0.01
+% Note that complex exponentials are used in input signal hence plots are
+% shown for -pi to pi instead of just 0 to pi
+fft_len = 1024;
+N = length(x01);
+% zero padding signal
+x_padded = zeros(fft_len,1);
+x_padded(1:N) = x01(1:N);
+fft_xN = fftshift(fft(x_padded, fft_len));
+freq = linspace(-pi,pi,fft_len);
+prdgrm_psd_x01 = (abs(fft_xN).^2)/N;
+fig = figure; 
+plot(freq,10*log10(prdgrm_psd_x01)); 
+title('PSD estimate of x01 periodogram method');
+xlabel('w');
+ylabel('PSD(dB)')
+set(gcf, 'Position', get(0, 'Screensize'));
+set(gca,'xtick',[-pi,0,3*pi/8,pi/2,5*pi/8,pi]);
+set(gca,'xgrid','on');
+saveas(fig,'../results/Q2/PSD estimate of x01 periodogram method','jpg');
+
+%% Q2 (b) Spectral Estimates for following methods
+
+%% (i)  : AR model autocorrelation ( p = 7 )
+% <include>AR_autocorrelation_spectrum.m</include>
+
+for k = 1:length(k_list)
+    x = x_list(:,k);
+    [AR_autocorr_psd,freq] = AR_autocorrelation_spectrum(x,7,k_list(k));
+    fig = figure;
+    plot(freq,10*log10(AR_autocorr_psd));
+    title(['PSD estimate Autocorrelation method x',num2str(k_list(k))]);
+    xlabel('w');
+    ylabel('PSD(dB)');
+    set(gcf, 'Position', get(0, 'Screensize'));
+    set(gca,'xtick',[-pi,0,3*pi/8,pi/2,5*pi/8,pi]);
+    set(gca,'xgrid','on');
+    saveas(fig,['../results/Q2/','PSD estimate Autocorrelation method x',num2str(k_list(k))],'jpg');
+end
+
+%% (ii) : AR model covariance ( p = 7 )
+% <include>AR_covariance_spectrum.m</include>
+
+for k = 1:length(k_list)
+    x = x_list(:,k);
+    [AR_covar_psd,freq] = AR_covariance_spectrum(x,7,k_list(k));
+    fig = figure;
+    plot(freq,10*log10(AR_covar_psd));
+    title(['PSD estimate covariance method x',num2str(k_list(k))]);
+    xlabel('w');
+    ylabel('PSD(dB)');
+    set(gcf, 'Position', get(0, 'Screensize'));
+    set(gca,'xtick',[-pi,0,3*pi/8,pi/2,5*pi/8,pi]);
+    set(gca,'xgrid','on');
+    saveas(fig,['../results/Q2/','PSD estimate covariance method x',num2str(k_list(k))],'jpg');
+end
+
+%% (iii): MUSIC method (8*8 covariance method matrix) 
+% <include>MUSIC_spectrum.m</include>
+
+for k = 1:length(k_list)
+    x = x_list(:,k);
+    [MUSIC_psd,freq] = MUSIC_spectrum(x,7,3,k_list(k));
+    fig = figure;
+    plot(freq,10*log10(MUSIC_psd));
+    title(['PSD estimate MUSIC method x',num2str(k_list(k))]);
+    xlabel('w');
+    ylabel('PSD(dB)');
+    set(gcf, 'Position', get(0, 'Screensize'));
+    set(gca,'xtick',[-pi,0,3*pi/8,pi/2,5*pi/8,pi]);
+    set(gca,'xgrid','on');
+    saveas(fig,['../results/Q2/','PSD estimate MUSIC method x',num2str(k_list(k))],'jpg');
+end
+
+%% (iv) : Minimum Norm method (8*8 covariance method matrix)
+% <include>minimum_norm_spectrum.m</include>
+
+for k = 1:length(k_list)
+    x = x_list(:,k);
+    [minimum_norm_psd,freq] = minimum_norm_spectrum(x,7,3,k_list(k));
+    fig = figure;
+    plot(freq,10*log10(minimum_norm_psd));
+    title(['PSD estimate minimum norm method x',num2str(k_list(k))]);
+    xlabel('w');
+    ylabel('PSD(dB)');
+    set(gcf, 'Position', get(0, 'Screensize'));
+    set(gca,'xtick',[-pi,0,3*pi/8,pi/2,5*pi/8,pi]);
+    set(gca,'xgrid','on');
+    saveas(fig,['../results/Q2/','PSD estimate minimum norm method x',num2str(k_list(k))],'jpg');
+
+end
+
+%% All plots combined
+% Here all the plots are scaled for comparison.
+for k = 1:length(k_list)
+    x = x_list(:,k);
+    
+    [AR_autocorr_psd,freq] = AR_autocorrelation_spectrum(x,7,k_list(k));
+    AR_autocorr_psd= (AR_autocorr_psd-min(AR_autocorr_psd))./(max(AR_autocorr_psd)-min(AR_autocorr_psd));
+    [AR_covar_psd,freq] = AR_covariance_spectrum(x,7,k_list(k));
+    AR_covar_psd = (AR_covar_psd-min(AR_covar_psd))./(max(AR_covar_psd)-min(AR_covar_psd));
+    [MUSIC_psd,freq] = MUSIC_spectrum(x,7,3,k_list(k));
+    MUSIC_psd = (MUSIC_psd-min(MUSIC_psd))./(max(MUSIC_psd)-min(MUSIC_psd));
+    [minimum_norm_psd,freq] = minimum_norm_spectrum(x,7,3,k_list(k));
+    minimum_norm_psd = (minimum_norm_psd-min(minimum_norm_psd))./(max(minimum_norm_psd)-min(minimum_norm_psd));
+    
+    prdgrm_psd_x01 = (prdgrm_psd_x01 - min(prdgrm_psd_x01))./(max(prdgrm_psd_x01)-min(prdgrm_psd_x01));
+    
+    all_plots = 10*log([prdgrm_psd_x01,AR_autocorr_psd,AR_covar_psd,MUSIC_psd,minimum_norm_psd]);
+    fig = figure;
+    plot(freq,all_plots);
+    title(['Relative PSD plots for x',num2str(k_list(k))]);
+    xlabel('w');
+    ylabel('PSD(dB)');
+    lgnd = legend('Periodogram (base)','AR autocorrelation','AR covariance','MUSIC','Minimum norm');
+    lgnd.Orientation = 'horizontal';
+    lgnd.Location = 'south';
+    set(gcf, 'Position', get(0, 'Screensize'));
+    set(gca,'xtick',[-pi,0,3*pi/8,pi/2,5*pi/8,pi]);
+    set(gca,'xgrid','on');
+    saveas(fig,['../results/Q2/','Relative PSD plots for x',num2str(k_list(k))],'jpg');
+
+end
+
+%% Comparison of different methods
+%%
+% 
+% * AR autocorrelation method is not able to capture all three
+% frequencies for any value of noise. It is not suitable for distinguishing closely spaced
+% frequencies. 
+% * For the lesser values of noise (0.01), AR covariance, MUSIC and minimum
+% norm all three work well and produce peaks at given frequencies
+% * For the larger values of noise (0.4), AR covarianc is not able to
+% capture the middle peak. Also the quality of peaks produced MUSIC method
+% decreases. Minimum norm method prodcues better peaks compared to others
+% for higher values of noise
+% * We also observe deviation of peaks from ideal input frequencies (which
+% are displayed as vertical lines in PSD plots). The deviation is observed
+% to increase as noise increases. Deviation from actual frequencies:
+% Minimum norm < MUSIC < AR covariance < AR autocorrelation
+% * Energy in sidelobes (bands other other than peaks) can also be compared
+% to observe quality of peaks. Quality of peaks degrade with amount of
+% noise. Also it depends on different methods. Energy in sidelobes:
+% Minimum norm < MUSIC < AR covariance < AR autocorrelation
+% * Overall performance for frequency estimation in line spectrum is: 
+%   Minimum norm > MUSIC > AR covariance > AR autocorrelation
+
+
+##### SOURCE END #####
+--></body></html>

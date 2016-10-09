@@ -1,0 +1,653 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>main_all</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-08-16"><meta name="DC.source" content="main_all.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">EE 779: Assignment 1</a></li><li><a href="#2">Periodogram method code</a></li><li><a href="#3">Periodogram method results &amp; analysis</a></li><li><a href="#4">Welch method code</a></li><li><a href="#5">Welch method results &amp; analysis</a></li><li><a href="#6">Blackman Tukey method code</a></li><li><a href="#7">Blackman Tukey method results &amp; analysis</a></li><li><a href="#8">Actual PSD code</a></li><li><a href="#9">Actual PSD and autocorrelation plots</a></li><li><a href="#10">Comparing different methods</a></li><li><a href="#11">Different realizations</a></li><li><a href="#12">Average spectral estimation</a></li></ul></div><h2>EE 779: Assignment 1<a name="1"></a></h2><p>Kalpesh Patil 130040019</p><pre class="codeinput">close <span class="string">all</span>
+clear <span class="string">all</span>
+
+<span class="comment">% read input data</span>
+x = getdata(<span class="string">'../assgn1_data/assgn1_data/S01.dat'</span>);
+</pre><h2>Periodogram method code<a name="2"></a></h2><pre class="codeinput">fft_len = 1024;
+N = 128;
+<span class="comment">% zero padding signal</span>
+x_padded = zeros(fft_len,1);
+x_padded(1:N) = x(1:N);
+fft_xN = fftshift(fft(x_padded, fft_len));
+psd_prdgrm_128 = (abs(fft_xN).^2)/N;
+fig = figure;
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(psd_prdgrm_128));
+title(<span class="string">'PSD using Periodogram (N = 128)'</span>);
+xlabel(<span class="string">'Normalizaed frequency'</span>);
+ylabel(<span class="string">'PSD in db'</span>)
+saveas(fig,<span class="string">'../results/psd_prdgrm_128.jpg'</span>,<span class="string">'jpg'</span>);
+
+N = 512;
+<span class="comment">% zero padding signal</span>
+x_padded = zeros(fft_len,1);
+x_padded(1:N) = x(1:N);
+fft_xN = fftshift(fft(x(1:N), fft_len));
+psd_prdgrm_512 = (abs(fft_xN).^2)/N;
+fig = figure;
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(psd_prdgrm_512));
+title(<span class="string">'PSD using Periodogram (N = 512)'</span>);
+xlabel(<span class="string">'Normalizaed frequency'</span>);
+ylabel(<span class="string">'PSD in db'</span>)
+saveas(fig,<span class="string">'../results/psd_prdgrm_512.jpg'</span>,<span class="string">'jpg'</span>);
+</pre><h2>Periodogram method results &amp; analysis<a name="3"></a></h2><p>As N is increased the resolution (ability to resolve closely spaced frequency components) is improved. This can be observed in the PSD estimation plots for N = 128 and N = 512. The variance of the periodogram remains constant irrespective of N (was proved in class). For lower value of N, PSD estimate is smoother.</p><img vspace="5" hspace="5" src="main_all_01.png" alt=""> <img vspace="5" hspace="5" src="main_all_02.png" alt=""> <h2>Welch method code<a name="4"></a></h2><pre class="codeinput">fft_len = 1024;
+N = length(x);
+L = 32;
+<span class="comment">% overlap</span>
+D = L/2;
+w = bartlett(L);
+sum_psd = zeros(fft_len,1);
+<span class="comment">% finding number of blocks</span>
+K = floor(N/(L-D))-1;
+<span class="keyword">for</span> i = 1:K
+    xw_padded = zeros(fft_len,1);
+    xw_padded(1:L) = x((i-1)*(L-D)+1:(i-1)*(L-D)+L)'.*w(1:L);
+    sum_psd = sum_psd + abs(fftshift(fft(xw_padded, fft_len))).^2;
+<span class="keyword">end</span>
+U = sum(abs(w).^2)/L;
+psd_welch_32 = sum_psd/(K*L*U);
+fig = figure;
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(psd_welch_32));
+title(<span class="string">'PSD using Welch (L = 32 , D = 16)'</span>);
+xlabel(<span class="string">'Normalizaed frequency'</span>);
+ylabel(<span class="string">'PSD in db'</span>);
+saveas(fig,<span class="string">'../results/psd_welch_32.jpg'</span>,<span class="string">'jpg'</span>);
+
+L = 128;
+<span class="comment">% overlap</span>
+D = L/2;
+w = bartlett(L);
+sum_psd = 0;
+<span class="comment">% finding number of blocks</span>
+K = floor(N/(L-D))-1;
+<span class="keyword">for</span> i = 1:K
+    xw_padded = zeros(fft_len,1);
+    xw_padded(1:L) = x((i-1)*(L-D)+1:(i-1)*(L-D)+L)'.*w(1:L);
+    sum_psd = sum_psd + abs(fftshift(fft(xw_padded, fft_len))).^2;
+<span class="keyword">end</span>
+U = sum(abs(w).^2)/L;
+psd_welch_128 = sum_psd/(K*L*U);
+fig = figure;
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(psd_welch_128));
+title(<span class="string">'PSD using Welch (L = 128 , D = 64)'</span>);
+xlabel(<span class="string">'Normalizaed frequency'</span>);
+ylabel(<span class="string">'PSD in db'</span>)
+saveas(fig,<span class="string">'../results/psd_welch_128.jpg'</span>,<span class="string">'jpg'</span>);
+</pre><h2>Welch method results &amp; analysis<a name="5"></a></h2><p>As L is increased the resolution (ability to resolve closely spaced frequency components) is improved. This can be observed in the PSD estimation plots for L = 32 and L = 128. As discussed in the class variance is less for higher values of K (lower values of L). The effect can be observed from the corresponding plots as well. Plot for L = 32 is smoother compared that of L=128. This example very well depicts the trade-off between resolution and variance for the same method with different parameters.</p><img vspace="5" hspace="5" src="main_all_03.png" alt=""> <img vspace="5" hspace="5" src="main_all_04.png" alt=""> <h2>Blackman Tukey method code<a name="6"></a></h2><pre class="codeinput">N = length(x);
+M = 32;
+fft_len = 1024;
+rxw_padded = zeros(fft_len,1);
+
+<span class="comment">% finding autocorrelation</span>
+rx = find_correlation(x);
+w = zeros(length(rx),1);
+w(N - M : N + M) = bartlett(2*M + 1);
+<span class="comment">% zero padding autocorrelation</span>
+rxw_padded(1:length(rx)) = rx.*w;
+psd_bmt_32 = abs(fftshift(fft(rxw_padded,fft_len)));
+fig = figure;
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(psd_bmt_32));
+title(<span class="string">'PSD using Blackman Tukey (M = 32)'</span>);
+xlabel(<span class="string">'Normalizaed frequency'</span>);
+ylabel(<span class="string">'PSD in db'</span>)
+saveas(fig,<span class="string">'../results/psd_bmt_32.jpg'</span>,<span class="string">'jpg'</span>);
+
+N = length(x);
+M = 128;
+fft_len = 1024;
+rxw_padded = zeros(fft_len,1);
+<span class="comment">% finding autocorrelation</span>
+rx = find_correlation(x);
+w = zeros(length(rx),1);
+w(N - M : N + M) = bartlett(2*M + 1);
+<span class="comment">% zero padding autocorrelation</span>
+rxw_padded(1:length(rx)) = rx.*w;
+psd_bmt_128 = abs(fftshift(fft(rxw_padded,fft_len)));
+fig = figure;
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(psd_bmt_128));
+title(<span class="string">'PSD using Blackman Tukey (M = 128)'</span>);
+xlabel(<span class="string">'Normalizaed frequency'</span>);
+ylabel(<span class="string">'PSD in db'</span>)
+saveas(fig,<span class="string">'../results/psd_bmt_128.jpg'</span>,<span class="string">'jpg'</span>);
+</pre><h2>Blackman Tukey method results &amp; analysis<a name="7"></a></h2><p>As M is increased the resolution (ability to resolve closely spaced frequency components) is improved. This can be observed in the PSD estimation plots for M = 32 and M = 128. As discussed in the class variance is less for higher values of K (lower values of M for the same amount of overlap). The effect can be observed from the corresponding plots as well. Plot for M = 32 is smoother compared that of M=128. This example very well depicts the trade-off between resolution and variance for the same method with different parameters.</p><img vspace="5" hspace="5" src="main_all_05.png" alt=""> <img vspace="5" hspace="5" src="main_all_06.png" alt=""> <h2>Actual PSD code<a name="8"></a></h2><pre class="codeinput">fft_len = 1024;
+rx_padded = zeros(fft_len,1);
+rx_len = fft_len - 1;
+rx = zeros(rx_len,1);
+sigma_not = 1;
+rho = 0.95;
+const = (sigma_not^2)/(1-rho^2);
+rho = 0.95;
+rx(fft_len/2) = (sigma_not^2)/(1-rho^2);
+<span class="comment">% calculating autocorrelation</span>
+<span class="keyword">for</span> i = 1:(rx_len + 1)/2 - 1
+    l = (rx_len + 1)/2 - i;
+    rx(i) = const*rho^l;
+    rx(rx_len - i + 1) = rx(i);
+<span class="keyword">end</span>
+rx_padded(1:rx_len) = rx;
+
+psd_actual = abs(fftshift(fft(rx_padded, fft_len))).^2;
+fig = figure;
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(psd_actual));
+title(<span class="string">'PSD actual (N = 1023)'</span>);
+xlabel(<span class="string">'Normalizaed frequency'</span>);
+ylabel(<span class="string">'PSD in db'</span>)
+saveas(fig,<span class="string">'../results/psd_actual.jpg'</span>,<span class="string">'jpg'</span>);
+
+fig = figure;
+t = [-(length(rx)-1)/2:(length(rx)-1)/2];
+plot(t,rx);
+title(<span class="string">'Autocorrelation function'</span>);
+xlabel(<span class="string">'n (time)'</span>);
+ylabel(<span class="string">'Autocorrelation'</span>)
+saveas(fig,<span class="string">'../results/rx_actual.jpg'</span>,<span class="string">'jpg'</span>);
+</pre><h2>Actual PSD and autocorrelation plots<a name="9"></a></h2><p>Following plots are for the autocorrelation function given in Q2</p><img vspace="5" hspace="5" src="main_all_07.png" alt=""> <img vspace="5" hspace="5" src="main_all_08.png" alt=""> <h2>Comparing different methods<a name="10"></a></h2><p>Different methods of spetral estimation can be compared on the basis of trade-off between variance and resolution. Also changing parameters of the same method changes estimated spectrum (such parameters dependancies are mentioned above in respective sections of those methods). In terms of variance Periodogram method performs worst. More number of blocks used for estimation reduces variance. But more blocks imply shorter blocks and hence resolution will be poorer. In case of Welch method, overlaping allows more number of blocks of given length, hence it outperforms periodogram and normal bartletts (nonoverlapping) methods. Blackman Tukey considers different approach to reduce variance. It reduces variance by smoothening out the variations of the underlined single periodogram. For comparison of different methods resolution*variance can be considered as figure of merit. On an average Blackman Tukey peroforms better than Welch and periodogram. Blackman Tukey &gt; Welch &gt; Periodogram. Overall Blackman Tukey performs the best with low variance and better resolution than other methods.</p><h2>Different realizations<a name="11"></a></h2><p>Different realizations of the same process are demonstrated by implementing difference equation of underlined filter and giving white gaussian noise as an input to it. Let H(z) be the filter. The output of this filter will be ((sigma0^2)*|H(z)|^2)/2. It can be observed that autocorrelation function in the previous question is inverse z transform of the output of this question except for the constant multiplying factor. Spectral estimation of each realization is calculated. Average spectrogram of multiple realizations is also plotted here.</p><pre class="codeinput">n_realizations = 15;
+all_psd_prdgrm_128 = zeros(1024,n_realizations);
+all_psd_prdgrm_512 = zeros(1024,n_realizations);
+all_psd_welch_32 = zeros(1024,n_realizations);
+all_psd_welch_128 = zeros(1024,n_realizations);
+all_psd_bmt_32 = zeros(1024,n_realizations);
+all_psd_bmt_128 = zeros(1024,n_realizations);
+fig1 = figure;
+r = zeros(1023,n_realizations);
+<span class="keyword">for</span> iter = 1:n_realizations
+ rho = 0.95;
+ len = 512;
+ power_db = 0;
+ v = wgn(len,1,power_db);
+ y = zeros(len,1);
+ y(1) = v(1);
+ <span class="comment">% implimenting difference eqution for the given filter</span>
+ <span class="keyword">for</span> i = 2:len
+ y(i) = v(i) + rho*y(i-1);
+ <span class="keyword">end</span>
+ y = y - mean(y);
+ y = y';
+ r(:,iter) = find_correlation(y);
+ figure(fig1);
+ t = [-(length(r)-1)/2:(length(r)-1)/2];
+ plot(t,r);
+ title(<span class="string">'Different realizations (autocorrelation)'</span>);
+ ylabel(<span class="string">'Autocorrelation'</span>);
+ xlabel(<span class="string">'n (time)'</span>);
+ hold <span class="string">on</span>;
+ [all_psd_prdgrm_128(:,iter), all_psd_prdgrm_512(:,iter)] = psd_periodogram_method(y);
+ [all_psd_welch_32(:,iter), all_psd_welch_128(:,iter)] = psd_welch_method(y);
+ [all_psd_bmt_32(:,iter), all_psd_bmt_128(:,iter)] = psd_blackman_tukey_method(y);
+
+
+<span class="keyword">end</span>
+fig = figure;
+plot(t,mean(r,2));
+title(<span class="string">'Average autocorrelation'</span>);
+ylabel(<span class="string">'Average autocorrelation'</span>);
+xlabel(<span class="string">'n (time)'</span>);
+
+saveas(fig,<span class="string">'../results/average_autocorrelation.jpg'</span>,<span class="string">'jpg'</span>);
+saveas(fig1,<span class="string">'../results/realizations_autocorrelation.jpg'</span>,<span class="string">'jpg'</span>);
+
+<span class="comment">%computin average periodogram estimation</span>
+avg_psd_prdgrm_512 = mean(all_psd_prdgrm_512,2);
+avg_psd_prdgrm_128 = mean(all_psd_prdgrm_128,2);
+avg_psd_welch_32 = mean(all_psd_welch_32,2);
+avg_psd_welch_128 = mean(all_psd_welch_128,2);
+avg_psd_bmt_32 = mean(all_psd_bmt_32,2);
+avg_psd_bmt_128 = mean(all_psd_bmt_128,2);
+
+avg_psd_prdgrm_512(513) = (avg_psd_prdgrm_512(512)+ avg_psd_prdgrm_512(514))/2;
+</pre><img vspace="5" hspace="5" src="main_all_09.png" alt=""> <img vspace="5" hspace="5" src="main_all_10.png" alt=""> <h2>Average spectral estimation<a name="12"></a></h2><p>The average of multiple realizations of the same process is taken and plotted here. As expected it is observed that all the plots have become smoother since we have taken average of multiple realizations. Also all the spectra tend towards actual spectrum of the signal as number of realizations over which average has taken is increased</p><pre class="codeinput">fig = figure;
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(avg_psd_prdgrm_128));
+title(<span class="string">'Average PSD for multiple realizations using Periodogram (N = 128)'</span>);
+xlabel(<span class="string">'Normalizaed frequency'</span>);
+ylabel(<span class="string">'Average PSD in db'</span>);
+saveas(fig,<span class="string">'../results/avg_psd_prdgrm_128.jpg'</span>,<span class="string">'jpg'</span>);
+
+fig = figure;
+plot(freq,10*log(avg_psd_prdgrm_512));
+title(<span class="string">'Average PSD for multiple realizations using Periodogram (N = 512)'</span>);
+xlabel(<span class="string">'Normalizaed frequency'</span>);
+ylabel(<span class="string">'Average PSD in db'</span>);
+saveas(fig,<span class="string">'../results/avg_psd_prdgrm_512.jpg'</span>,<span class="string">'jpg'</span>);
+
+fig = figure;
+plot(freq,10*log(avg_psd_welch_32));
+title(<span class="string">'Average PSD for multiple realizations using Welch (L = 32, D = 16)'</span>);
+xlabel(<span class="string">'Normalizaed frequency'</span>);
+ylabel(<span class="string">'Average PSD in db'</span>);
+saveas(fig,<span class="string">'../results/avg_psd_welch_32.jpg'</span>,<span class="string">'jpg'</span>);
+
+fig = figure;
+plot(freq,10*log(avg_psd_welch_128));
+title(<span class="string">'Average PSD for multiple realizations using Welch (L = 128, D = 64)'</span>);
+xlabel(<span class="string">'Normalizaed frequency'</span>);
+ylabel(<span class="string">'Average PSD in db'</span>);
+saveas(fig,<span class="string">'../results/avg_psd_welch_128.jpg'</span>,<span class="string">'jpg'</span>);
+
+fig = figure;
+plot(freq,10*log(avg_psd_bmt_32));
+title(<span class="string">'Average PSD for multiple realizations using Blackman Tukey (M = 32)'</span>);
+xlabel(<span class="string">'Normalizaed frequency'</span>);
+ylabel(<span class="string">'Average PSD in db'</span>);
+saveas(fig,<span class="string">'../results/avg_psd_bmt_32.jpg'</span>,<span class="string">'jpg'</span>);
+
+fig = figure;
+plot(freq,10*log(avg_psd_bmt_128));
+title(<span class="string">'Average PSD for multiple realizations using Blackman Tukey (M = 128)'</span>);
+xlabel(<span class="string">'Normalizaed frequency'</span>);
+ylabel(<span class="string">'Average PSD in db'</span>);
+saveas(fig,<span class="string">'../results/avg_psd_bmt_128.jpg'</span>,<span class="string">'jpg'</span>);
+</pre><img vspace="5" hspace="5" src="main_all_11.png" alt=""> <img vspace="5" hspace="5" src="main_all_12.png" alt=""> <img vspace="5" hspace="5" src="main_all_13.png" alt=""> <img vspace="5" hspace="5" src="main_all_14.png" alt=""> <img vspace="5" hspace="5" src="main_all_15.png" alt=""> <img vspace="5" hspace="5" src="main_all_16.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% EE 779: Assignment 1
+% Kalpesh Patil
+% 130040019
+
+close all 
+clear all
+
+% read input data
+x = getdata('../assgn1_data/assgn1_data/S01.dat');
+%% Periodogram method code
+
+fft_len = 1024;
+N = 128;
+% zero padding signal
+x_padded = zeros(fft_len,1);
+x_padded(1:N) = x(1:N);
+fft_xN = fftshift(fft(x_padded, fft_len));
+psd_prdgrm_128 = (abs(fft_xN).^2)/N;
+fig = figure; 
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(psd_prdgrm_128)); 
+title('PSD using Periodogram (N = 128)');
+xlabel('Normalizaed frequency');
+ylabel('PSD in db')
+saveas(fig,'../results/psd_prdgrm_128.jpg','jpg');
+
+N = 512;
+% zero padding signal
+x_padded = zeros(fft_len,1);
+x_padded(1:N) = x(1:N);
+fft_xN = fftshift(fft(x(1:N), fft_len));
+psd_prdgrm_512 = (abs(fft_xN).^2)/N;
+fig = figure; 
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(psd_prdgrm_512)); 
+title('PSD using Periodogram (N = 512)');
+xlabel('Normalizaed frequency');
+ylabel('PSD in db')
+saveas(fig,'../results/psd_prdgrm_512.jpg','jpg');
+
+
+
+%%% Periodogram method results & analysis
+% As N is increased the resolution (ability to resolve closely spaced 
+% frequency
+% components) is improved. This can be observed in the PSD estimation plots
+% for N = 128 and N = 512. The variance of the periodogram remains constant
+% irrespective of N (was proved in class). 
+% For lower value of N, PSD estimate is smoother. 
+
+%% Welch method code
+fft_len = 1024;
+N = length(x);
+L = 32;
+% overlap
+D = L/2;
+w = bartlett(L);
+sum_psd = zeros(fft_len,1);
+% finding number of blocks 
+K = floor(N/(L-D))-1;
+for i = 1:K
+    xw_padded = zeros(fft_len,1);
+    xw_padded(1:L) = x((i-1)*(L-D)+1:(i-1)*(L-D)+L)'.*w(1:L);
+    sum_psd = sum_psd + abs(fftshift(fft(xw_padded, fft_len))).^2; 
+end 
+U = sum(abs(w).^2)/L;
+psd_welch_32 = sum_psd/(K*L*U);
+fig = figure; 
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(psd_welch_32));
+title('PSD using Welch (L = 32 , D = 16)');
+xlabel('Normalizaed frequency');
+ylabel('PSD in db');
+saveas(fig,'../results/psd_welch_32.jpg','jpg');
+
+L = 128;
+% overlap
+D = L/2;
+w = bartlett(L);
+sum_psd = 0;
+% finding number of blocks 
+K = floor(N/(L-D))-1;
+for i = 1:K
+    xw_padded = zeros(fft_len,1);
+    xw_padded(1:L) = x((i-1)*(L-D)+1:(i-1)*(L-D)+L)'.*w(1:L);
+    sum_psd = sum_psd + abs(fftshift(fft(xw_padded, fft_len))).^2; 
+end  
+U = sum(abs(w).^2)/L;
+psd_welch_128 = sum_psd/(K*L*U);
+fig = figure; 
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(psd_welch_128));
+title('PSD using Welch (L = 128 , D = 64)');
+xlabel('Normalizaed frequency');
+ylabel('PSD in db')
+saveas(fig,'../results/psd_welch_128.jpg','jpg');
+
+%%% Welch method results & analysis
+% As L is increased the resolution (ability to resolve closely spaced 
+% frequency
+% components) is improved. This can be observed in the PSD estimation plots
+% for L = 32 and L = 128. As discussed in the class variance is less for 
+% higher values of K (lower values of L).  
+% The effect can be observed from the corresponding plots as well.
+% Plot for L = 32 is smoother compared that of L=128.
+% This example very well depicts the trade-off between resolution and
+% variance for the same method with different parameters.
+
+%% Blackman Tukey method code
+N = length(x);
+M = 32;
+fft_len = 1024;
+rxw_padded = zeros(fft_len,1);
+
+% finding autocorrelation
+rx = find_correlation(x);
+w = zeros(length(rx),1);
+w(N - M : N + M) = bartlett(2*M + 1);
+% zero padding autocorrelation
+rxw_padded(1:length(rx)) = rx.*w;
+psd_bmt_32 = abs(fftshift(fft(rxw_padded,fft_len)));
+fig = figure; 
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(psd_bmt_32));
+title('PSD using Blackman Tukey (M = 32)');
+xlabel('Normalizaed frequency');
+ylabel('PSD in db')
+saveas(fig,'../results/psd_bmt_32.jpg','jpg');
+
+N = length(x);
+M = 128;
+fft_len = 1024;
+rxw_padded = zeros(fft_len,1);
+% finding autocorrelation
+rx = find_correlation(x);
+w = zeros(length(rx),1);
+w(N - M : N + M) = bartlett(2*M + 1);
+% zero padding autocorrelation
+rxw_padded(1:length(rx)) = rx.*w;
+psd_bmt_128 = abs(fftshift(fft(rxw_padded,fft_len)));
+fig = figure; 
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(psd_bmt_128));
+title('PSD using Blackman Tukey (M = 128)');
+xlabel('Normalizaed frequency');
+ylabel('PSD in db')
+saveas(fig,'../results/psd_bmt_128.jpg','jpg');
+
+%%% Blackman Tukey method results & analysis
+% As M is increased the resolution (ability to resolve closely spaced 
+% frequency
+% components) is improved. This can be observed in the PSD estimation plots
+% for M = 32 and M = 128. As discussed in the class variance is less for 
+% higher values of K (lower values of M for the same amount of overlap). 
+% The effect can be observed from the corresponding plots as well.
+% Plot for M = 32 is smoother compared that of M=128.
+% This example very well depicts the trade-off between resolution and
+% variance for the same method with different parameters.
+
+%% Actual PSD code
+
+fft_len = 1024;
+rx_padded = zeros(fft_len,1);
+rx_len = fft_len - 1;
+rx = zeros(rx_len,1);
+sigma_not = 1;
+rho = 0.95;
+const = (sigma_not^2)/(1-rho^2);
+rho = 0.95;
+rx(fft_len/2) = (sigma_not^2)/(1-rho^2);
+% calculating autocorrelation
+for i = 1:(rx_len + 1)/2 - 1
+    l = (rx_len + 1)/2 - i;
+    rx(i) = const*rho^l;
+    rx(rx_len - i + 1) = rx(i);
+end
+rx_padded(1:rx_len) = rx;
+
+psd_actual = abs(fftshift(fft(rx_padded, fft_len))).^2;
+fig = figure; 
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(psd_actual));
+title('PSD actual (N = 1023)');
+xlabel('Normalizaed frequency');
+ylabel('PSD in db')
+saveas(fig,'../results/psd_actual.jpg','jpg');
+
+fig = figure; 
+t = [-(length(rx)-1)/2:(length(rx)-1)/2];
+plot(t,rx);
+title('Autocorrelation function');
+xlabel('n (time)');
+ylabel('Autocorrelation')
+saveas(fig,'../results/rx_actual.jpg','jpg');
+
+%%% Actual PSD and autocorrelation plots
+% Following plots are for the autocorrelation function given in Q2
+
+
+%% Comparing different methods
+% Different methods of spetral estimation can be compared on the basis of
+% trade-off between variance and resolution. Also changing parameters of
+% the same method changes estimated spectrum (such parameters dependancies
+% are mentioned above in respective sections of those methods). In terms of
+% variance Periodogram method performs worst. More number of blocks used 
+% for estimation reduces variance. But more blocks imply shorter blocks
+% and hence resolution will be poorer. In case of Welch method, overlaping  
+% allows more number of blocks of given length, hence it outperforms
+% periodogram and normal bartletts (nonoverlapping) methods. Blackman Tukey
+% considers different approach to reduce variance. It reduces variance by
+% smoothening out the variations of the underlined single periodogram. For
+% comparison of different methods resolution*variance can be considered as
+% figure of merit. On an average Blackman Tukey peroforms better than Welch
+% and periodogram. Blackman Tukey > Welch > Periodogram.
+% Overall Blackman Tukey performs the best with low variance and better
+% resolution than other methods. 
+
+%% Different realizations
+% Different realizations of the same process are demonstrated by 
+% implementing difference equation of underlined filter and giving white
+% gaussian noise as an input to it. Let H(z) be the filter. The output of
+% this filter will be ((sigma0^2)*|H(z)|^2)/2. It can be observed that
+% autocorrelation function in the previous question is inverse z transform
+% of the output of this question except for the constant multiplying
+% factor. 
+% Spectral estimation of each
+% realization is calculated. Average spectrogram of multiple realizations
+% is also plotted here.
+
+
+n_realizations = 15;
+all_psd_prdgrm_128 = zeros(1024,n_realizations);
+all_psd_prdgrm_512 = zeros(1024,n_realizations);
+all_psd_welch_32 = zeros(1024,n_realizations);
+all_psd_welch_128 = zeros(1024,n_realizations);
+all_psd_bmt_32 = zeros(1024,n_realizations);
+all_psd_bmt_128 = zeros(1024,n_realizations);
+fig1 = figure;
+r = zeros(1023,n_realizations);
+for iter = 1:n_realizations
+ rho = 0.95;
+ len = 512;
+ power_db = 0;
+ v = wgn(len,1,power_db);
+ y = zeros(len,1);
+ y(1) = v(1);
+ % implimenting difference eqution for the given filter
+ for i = 2:len
+ y(i) = v(i) + rho*y(i-1);
+ end
+ y = y - mean(y);
+ y = y';
+ r(:,iter) = find_correlation(y);
+ figure(fig1);
+ t = [-(length(r)-1)/2:(length(r)-1)/2];
+ plot(t,r);
+ title('Different realizations (autocorrelation)');
+ ylabel('Autocorrelation');
+ xlabel('n (time)');
+ hold on;
+ [all_psd_prdgrm_128(:,iter), all_psd_prdgrm_512(:,iter)] = psd_periodogram_method(y);
+ [all_psd_welch_32(:,iter), all_psd_welch_128(:,iter)] = psd_welch_method(y);
+ [all_psd_bmt_32(:,iter), all_psd_bmt_128(:,iter)] = psd_blackman_tukey_method(y);
+   
+ 
+end
+fig = figure;
+plot(t,mean(r,2));
+title('Average autocorrelation');
+ylabel('Average autocorrelation');
+xlabel('n (time)');
+
+saveas(fig,'../results/average_autocorrelation.jpg','jpg');
+saveas(fig1,'../results/realizations_autocorrelation.jpg','jpg');
+
+%computin average periodogram estimation
+avg_psd_prdgrm_512 = mean(all_psd_prdgrm_512,2);
+avg_psd_prdgrm_128 = mean(all_psd_prdgrm_128,2);
+avg_psd_welch_32 = mean(all_psd_welch_32,2);
+avg_psd_welch_128 = mean(all_psd_welch_128,2);
+avg_psd_bmt_32 = mean(all_psd_bmt_32,2);
+avg_psd_bmt_128 = mean(all_psd_bmt_128,2);
+
+avg_psd_prdgrm_512(513) = (avg_psd_prdgrm_512(512)+ avg_psd_prdgrm_512(514))/2;
+%% Average spectral estimation
+% The average of multiple realizations of the same process is taken and
+% plotted here. As expected it is observed that all the plots have become smoother
+% since we have taken average of multiple realizations. Also all the
+% spectra tend towards actual spectrum of the signal as number of realizations over which average has
+% taken is increased
+
+fig = figure; 
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log(avg_psd_prdgrm_128)); 
+title('Average PSD for multiple realizations using Periodogram (N = 128)');
+xlabel('Normalizaed frequency');
+ylabel('Average PSD in db');
+saveas(fig,'../results/avg_psd_prdgrm_128.jpg','jpg');
+
+fig = figure;
+plot(freq,10*log(avg_psd_prdgrm_512)); 
+title('Average PSD for multiple realizations using Periodogram (N = 512)');
+xlabel('Normalizaed frequency');
+ylabel('Average PSD in db');
+saveas(fig,'../results/avg_psd_prdgrm_512.jpg','jpg');
+
+fig = figure;
+plot(freq,10*log(avg_psd_welch_32)); 
+title('Average PSD for multiple realizations using Welch (L = 32, D = 16)');
+xlabel('Normalizaed frequency');
+ylabel('Average PSD in db');
+saveas(fig,'../results/avg_psd_welch_32.jpg','jpg');
+
+fig = figure;
+plot(freq,10*log(avg_psd_welch_128)); 
+title('Average PSD for multiple realizations using Welch (L = 128, D = 64)');
+xlabel('Normalizaed frequency');
+ylabel('Average PSD in db');
+saveas(fig,'../results/avg_psd_welch_128.jpg','jpg');
+
+fig = figure;
+plot(freq,10*log(avg_psd_bmt_32)); 
+title('Average PSD for multiple realizations using Blackman Tukey (M = 32)');
+xlabel('Normalizaed frequency');
+ylabel('Average PSD in db');
+saveas(fig,'../results/avg_psd_bmt_32.jpg','jpg');
+
+fig = figure;
+plot(freq,10*log(avg_psd_bmt_128)); 
+title('Average PSD for multiple realizations using Blackman Tukey (M = 128)');
+xlabel('Normalizaed frequency');
+ylabel('Average PSD in db');
+saveas(fig,'../results/avg_psd_bmt_128.jpg','jpg');
+
+
+
+##### SOURCE END #####
+--></body></html>

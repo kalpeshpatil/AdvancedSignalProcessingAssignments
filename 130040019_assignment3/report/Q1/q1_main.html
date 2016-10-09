@@ -1,0 +1,450 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>EE 779: Assignment 1: Q.1</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-09-27"><meta name="DC.source" content="q1_main.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>EE 779: Assignment 1: Q.1</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Kalpesh Patil</a></li><li><a href="#2">130040019</a></li><li><a href="#3">Q1 (a):  3&times;3 Toeplitz correlation matrix for the signal data using</a></li><li><a href="#4">Q1 (b): Second order linear prediction parameters and error</a></li><li><a href="#5">Q1 (c): Error signal</a></li><li><a href="#6">Q1 (d): first order linear prediction filter</a></li><li><a href="#7">Q1 (e): AR spectral plot for first order model</a></li><li><a href="#8">Q1 (f): AR spectral plot for second order model</a></li><li><a href="#9">Q1 (g): Periodogram Method and best method</a></li></ul></div><h2>Kalpesh Patil<a name="1"></a></h2><h2>130040019<a name="2"></a></h2><pre class="codeinput">close <span class="string">all</span>
+clear <span class="string">all</span>
+
+<span class="comment">% read input data</span>
+x = getdata(<span class="string">'../assgn1_data/assgn1_data/S01.dat'</span>);
+x = x';
+</pre><h2>Q1 (a):  3&times;3 Toeplitz correlation matrix for the signal data using<a name="3"></a></h2><p>Autocorrelation matrix</p><pre class="codeinput">p = 2;
+r = find_correlation(x);
+
+Rxx_autocorr_AR2 = [r(1) r(2) r(3),
+                    r(2) r(1) r(2),
+                    r(3) r(2) r(1)];
+
+<span class="comment">% Rxx_autocorr_AR2</span>
+Rxx_autocorr_AR2
+</pre><pre class="codeoutput">
+Rxx_autocorr_AR2 =
+
+    7.8935    7.3366    6.8760
+    7.3366    7.8935    7.3366
+    6.8760    7.3366    7.8935
+
+</pre><h2>Q1 (b): Second order linear prediction parameters and error<a name="4"></a></h2><pre class="codeinput"><span class="comment">% Second order filter parameters are obtained by solving Yule-Walker</span>
+<span class="comment">% equation. Prediction error variance is found.</span>
+temp = Rxx_autocorr_AR2(2:end,2:end);
+r_AR2 = -[r(2),r(3)]';
+a_AR2 = inv(temp)*r_AR2;
+a_AR2 = [1,a_AR2.']';
+
+error_sq_AR2 = 0;
+<span class="keyword">for</span> j = 1:p+1
+   error_sq_AR2 = error_sq_AR2 + a_AR2(j)*conj(r(j));
+<span class="keyword">end</span>
+
+error_AR2 = sqrt(abs(error_sq_AR2));
+
+error_sq_AR2
+a_AR2
+</pre><pre class="codeoutput">
+error_sq_AR2 =
+
+    1.0714
+
+
+a_AR2 =
+
+    1.0000
+   -0.8802
+   -0.0530
+
+</pre><h2>Q1 (c): Error signal<a name="5"></a></h2><p>After applying filer to othe original data, error signal was calculated. The variance of this error signal was found apporximately equal to the theoritical value calculated in parta(a). Percentage chhange is found to be 0.28%.</p><pre class="codeinput">err_pred_AR2 = zeros(length(x),1);
+err_pred_AR2 =  a_AR2(1)*x + (a_AR2(2)*[0 x(1:end-1)'] + a_AR2(3)*[0 0 x(1:end-2)'])';
+error_sq_pred_AR2 = var(err_pred_AR2);
+
+error_sq_pred_AR2
+error_sq_AR2
+percentage_change = (error_sq_pred_AR2 - error_sq_AR2)/error_sq_AR2;
+percentage_change
+
+
+fig = figure();
+plot(err_pred_AR2);
+title(<span class="string">'Prediction error for AR2'</span>);
+xlabel(<span class="string">'n'</span>);
+ylabel(<span class="string">'e[n]'</span>);
+set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+saveas(fig,<span class="string">'../results/Q1/Prediction error for AR2'</span>,<span class="string">'jpg'</span>);
+</pre><pre class="codeoutput">
+error_sq_pred_AR2 =
+
+    1.0684
+
+
+error_sq_AR2 =
+
+    1.0714
+
+
+percentage_change =
+
+   -0.0028
+
+</pre><img vspace="5" hspace="5" src="q1_main_01.png" alt=""> <h2>Q1 (d): first order linear prediction filter<a name="6"></a></h2><p>First order parameters are found out. It is found that prediction error variance for first order (1.0744) is more than that of second order (1.0714) calculated in part(a). Note that the difference between theoritical value and calculated value of error is same for both AR1 and AR2</p><pre class="codeinput">p = 1;
+Rxx_autocorr_AR1 = Rxx_autocorr_AR2(1:2,1:2);
+Rxx_autocorr_AR1
+temp = Rxx_autocorr_AR1(2:end,2:end);
+r_AR1 = -[r(2)]';
+a_AR1 = inv(temp)*r_AR1;
+a_AR1 = [1,a_AR1.']';
+error_sq_AR1 = 0;
+<span class="keyword">for</span> j = 1:p+1
+   error_sq_AR1 = error_sq_AR1 + a_AR1(j)*conj(r(j));
+<span class="keyword">end</span>
+
+error_AR1 = sqrt(abs(error_sq_AR1));
+
+error_sq_AR1
+error_sq_AR2
+
+
+<span class="comment">% prediction using AR1</span>
+
+err_pred_AR1 = zeros(length(x),1);
+err_pred_AR1 = a_AR1(1)*x + (a_AR1(2)*[0 x(1:end-1)'])';
+error_sq_pred_AR1 = var(err_pred_AR1);
+
+fig = figure();
+plot(err_pred_AR1);
+title(<span class="string">'Prediction error for AR1'</span>);
+xlabel(<span class="string">'n'</span>);
+ylabel(<span class="string">'e[n]'</span>);
+set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+saveas(fig,<span class="string">'../results/Q1/Prediction error for AR1'</span>,<span class="string">'jpg'</span>);
+</pre><pre class="codeoutput">
+Rxx_autocorr_AR1 =
+
+    7.8935    7.3366
+    7.3366    7.8935
+
+
+error_sq_AR1 =
+
+    1.0744
+
+
+error_sq_AR2 =
+
+    1.0714
+
+</pre><img vspace="5" hspace="5" src="q1_main_02.png" alt=""> <h2>Q1 (e): AR spectral plot for first order model<a name="7"></a></h2><pre class="codeinput">[h,w] = freqz(error_AR1,[a_AR1.'],<span class="string">'whole'</span>,1024);
+psd_AR1 = (abs(fftshift(h))).^2;
+freq = w - pi;
+plot(freq,10*log10(psd_AR1));
+title(<span class="string">'PSD estimate of AR1'</span>);
+xlabel(<span class="string">'w'</span>);
+ylabel(<span class="string">'PSD(dB)'</span>);
+set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+saveas(fig,<span class="string">'../results/Q1/PSD estimate of AR1'</span>,<span class="string">'jpg'</span>);
+</pre><img vspace="5" hspace="5" src="q1_main_03.png" alt=""> <h2>Q1 (f): AR spectral plot for second order model<a name="8"></a></h2><pre class="codeinput">[h,w] = freqz(error_AR2,[a_AR1.'],<span class="string">'whole'</span>,1024);
+psd_AR2 = (abs(fftshift(h))).^2;
+freq = w - pi;
+plot(freq,10*log10(psd_AR2));
+title(<span class="string">'PSD estimate of AR2'</span>);
+xlabel(<span class="string">'w'</span>);
+ylabel(<span class="string">'PSD(dB)'</span>);
+set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+saveas(fig,<span class="string">'../results/Q1/PSD estimate of AR2'</span>,<span class="string">'jpg'</span>);
+</pre><img vspace="5" hspace="5" src="q1_main_04.png" alt=""> <h2>Q1 (g): Periodogram Method and best method<a name="9"></a></h2><p>PSD estimates using periodogram method (N = 512) and Blackman Tukey (best method in Assignment 1). It is observed that AR models perform better in terms of modelling actual PSD compared to other nonparametric methods in this case. This signifies that the signal is indeed an AR process (which is true, as it was told in Assignment 1, it is an AR1 process). We can compare PSD estimates with the true signal PSD which was calculated in assignment_1.</p><pre class="codeinput">fft_len = 1024;
+N = 512;
+<span class="comment">% zero padding signal</span>
+x_padded = zeros(fft_len,1);
+x_padded(1:N) = x(1:N);
+fft_xN = fftshift(fft(x_padded, fft_len));
+psd_prdgrm = (abs(fft_xN).^2)/N;
+fig = figure;
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log10(psd_prdgrm));
+title(<span class="string">'PSD estimate using periodogram'</span>);
+xlabel(<span class="string">'w'</span>);
+ylabel(<span class="string">'PSD(dB)'</span>);
+set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+saveas(fig,<span class="string">'../results/Q1/PSD estimate using periodogram'</span>,<span class="string">'jpg'</span>);
+
+<span class="comment">% Best method (Blacman Tukey) from Assignment 1</span>
+N = length(x);
+M = 32;
+fft_len = 1024;
+rxw_padded = zeros(fft_len,1);
+rx_pos = find_correlation(x);
+
+pos_len = length(x);
+rx = zeros(2*pos_len - 1,1);
+rx(pos_len) = rx_pos(1);
+<span class="keyword">for</span> t = 2:length(rx_pos)
+    rx(pos_len + t - 1) = rx_pos(t);
+    rx(pos_len - t + 1) = rx_pos(t);
+<span class="keyword">end</span>
+
+
+w = zeros(length(rx),1);
+w(N - M : N + M) = bartlett(2*M + 1);
+rxw_padded(1:length(rx)) = rx.*w;
+psd_bmt_32 = (abs(fftshift(fft(rxw_padded,fft_len)))).^2;
+fig = figure;
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log10(psd_bmt_32));
+
+title(<span class="string">'PSD estimate using Blackman Tukey method'</span>);
+xlabel(<span class="string">'w'</span>);
+ylabel(<span class="string">'PSD(dB)'</span>);
+set(gcf, <span class="string">'Position'</span>, get(0, <span class="string">'Screensize'</span>));
+saveas(fig,<span class="string">'../results/Q1/PSD estimate using Blackman Tukey method'</span>,<span class="string">'jpg'</span>);
+</pre><img vspace="5" hspace="5" src="q1_main_05.png" alt=""> <img vspace="5" hspace="5" src="q1_main_06.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% EE 779: Assignment 1: Q.1
+%%% Kalpesh Patil
+%%% 130040019
+
+
+close all 
+clear all
+
+% read input data
+x = getdata('../assgn1_data/assgn1_data/S01.dat');
+x = x';
+
+%% Q1 (a):  3×3 Toeplitz correlation matrix for the signal data using
+% Autocorrelation matrix 
+p = 2;
+r = find_correlation(x);
+
+Rxx_autocorr_AR2 = [r(1) r(2) r(3),
+                    r(2) r(1) r(2),
+                    r(3) r(2) r(1)];
+
+% Rxx_autocorr_AR2
+Rxx_autocorr_AR2
+
+%% Q1 (b): Second order linear prediction parameters and error
+
+% Second order filter parameters are obtained by solving Yule-Walker
+% equation. Prediction error variance is found. 
+temp = Rxx_autocorr_AR2(2:end,2:end);
+r_AR2 = -[r(2),r(3)]';
+a_AR2 = inv(temp)*r_AR2;
+a_AR2 = [1,a_AR2.']';
+
+error_sq_AR2 = 0;
+for j = 1:p+1
+   error_sq_AR2 = error_sq_AR2 + a_AR2(j)*conj(r(j));
+end
+
+error_AR2 = sqrt(abs(error_sq_AR2));
+
+error_sq_AR2
+a_AR2
+
+%% Q1 (c): Error signal
+% After applying filer to othe original data, error signal was calculated.
+% The variance of this error signal was found apporximately equal to the 
+% theoritical value calculated in parta(a). Percentage chhange is found to
+% be 0.28%.
+
+err_pred_AR2 = zeros(length(x),1);
+err_pred_AR2 =  a_AR2(1)*x + (a_AR2(2)*[0 x(1:end-1)'] + a_AR2(3)*[0 0 x(1:end-2)'])';
+error_sq_pred_AR2 = var(err_pred_AR2);
+
+error_sq_pred_AR2
+error_sq_AR2
+percentage_change = (error_sq_pred_AR2 - error_sq_AR2)/error_sq_AR2;
+percentage_change
+
+
+fig = figure();
+plot(err_pred_AR2);
+title('Prediction error for AR2');
+xlabel('n');
+ylabel('e[n]');
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(fig,'../results/Q1/Prediction error for AR2','jpg');
+
+%% Q1 (d): first order linear prediction filter
+% First order parameters are found out. It is found that
+% prediction error variance for
+% first order (1.0744) is more than that of second order (1.0714) calculated in part(a). 
+% Note that the difference between theoritical value and calculated value
+% of error is same for both AR1 and AR2
+p = 1;
+Rxx_autocorr_AR1 = Rxx_autocorr_AR2(1:2,1:2);
+Rxx_autocorr_AR1
+temp = Rxx_autocorr_AR1(2:end,2:end);
+r_AR1 = -[r(2)]';
+a_AR1 = inv(temp)*r_AR1;
+a_AR1 = [1,a_AR1.']';
+error_sq_AR1 = 0;
+for j = 1:p+1
+   error_sq_AR1 = error_sq_AR1 + a_AR1(j)*conj(r(j));
+end
+
+error_AR1 = sqrt(abs(error_sq_AR1));
+
+error_sq_AR1
+error_sq_AR2
+
+
+% prediction using AR1
+
+err_pred_AR1 = zeros(length(x),1);
+err_pred_AR1 = a_AR1(1)*x + (a_AR1(2)*[0 x(1:end-1)'])';
+error_sq_pred_AR1 = var(err_pred_AR1);
+
+fig = figure();
+plot(err_pred_AR1);
+title('Prediction error for AR1');
+xlabel('n');
+ylabel('e[n]');
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(fig,'../results/Q1/Prediction error for AR1','jpg');
+
+
+
+%% Q1 (e): AR spectral plot for first order model
+[h,w] = freqz(error_AR1,[a_AR1.'],'whole',1024);
+psd_AR1 = (abs(fftshift(h))).^2;
+freq = w - pi;
+plot(freq,10*log10(psd_AR1));
+title('PSD estimate of AR1');
+xlabel('w');
+ylabel('PSD(dB)');
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(fig,'../results/Q1/PSD estimate of AR1','jpg');
+
+
+%% Q1 (f): AR spectral plot for second order model
+[h,w] = freqz(error_AR2,[a_AR1.'],'whole',1024);
+psd_AR2 = (abs(fftshift(h))).^2;
+freq = w - pi;
+plot(freq,10*log10(psd_AR2));
+title('PSD estimate of AR2');
+xlabel('w');
+ylabel('PSD(dB)');
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(fig,'../results/Q1/PSD estimate of AR2','jpg');
+
+%% Q1 (g): Periodogram Method and best method
+% PSD estimates using periodogram method (N = 512) and Blackman
+% Tukey (best method in Assignment 1). It is observed that AR models
+% perform better in terms of modelling actual PSD compared to other
+% nonparametric methods in this case. This signifies that the signal is
+% indeed an AR process (which is true, as it was told in Assignment 1, it is
+% an AR1 process). We can compare PSD estimates with the true signal PSD 
+% which was calculated in assignment_1. 
+
+fft_len = 1024;
+N = 512;
+% zero padding signal
+x_padded = zeros(fft_len,1);
+x_padded(1:N) = x(1:N);
+fft_xN = fftshift(fft(x_padded, fft_len));
+psd_prdgrm = (abs(fft_xN).^2)/N;
+fig = figure; 
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log10(psd_prdgrm)); 
+title('PSD estimate using periodogram');
+xlabel('w');
+ylabel('PSD(dB)');
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(fig,'../results/Q1/PSD estimate using periodogram','jpg');
+
+% Best method (Blacman Tukey) from Assignment 1
+N = length(x);
+M = 32;
+fft_len = 1024;
+rxw_padded = zeros(fft_len,1);
+rx_pos = find_correlation(x);
+
+pos_len = length(x);
+rx = zeros(2*pos_len - 1,1);
+rx(pos_len) = rx_pos(1);
+for t = 2:length(rx_pos)
+    rx(pos_len + t - 1) = rx_pos(t);
+    rx(pos_len - t + 1) = rx_pos(t);
+end
+
+
+w = zeros(length(rx),1);
+w(N - M : N + M) = bartlett(2*M + 1);
+rxw_padded(1:length(rx)) = rx.*w;
+psd_bmt_32 = (abs(fftshift(fft(rxw_padded,fft_len)))).^2;
+fig = figure; 
+freq = linspace(-pi,pi,fft_len);
+plot(freq,10*log10(psd_bmt_32));
+
+title('PSD estimate using Blackman Tukey method');
+xlabel('w');
+ylabel('PSD(dB)');
+set(gcf, 'Position', get(0, 'Screensize'));
+saveas(fig,'../results/Q1/PSD estimate using Blackman Tukey method','jpg');
+
+
+##### SOURCE END #####
+--></body></html>
