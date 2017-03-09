@@ -1,0 +1,191 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>EE779: PCA_assignment</title><meta name="generator" content="MATLAB 8.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-10-23"><meta name="DC.source" content="main_all.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>EE779: PCA_assignment</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Kalpesh Patil (130040019)</a></li><li><a href="#2">Q1 and Q2</a></li><li><a href="#3">Q3 and Q5</a></li><li><a href="#6">Q4 and Q5</a></li><li><a href="#8">Q6.</a></li></ul></div><h2>Kalpesh Patil (130040019)<a name="1"></a></h2><p>Note that some unnecessary print statements in the original implementation file of PCA have incresed length of the report. Ignore them.</p><h2>Q1 and Q2<a name="2"></a></h2><p>Required data was downloded. Code was studied to understand PCA implementation.</p><h2>Q3 and Q5<a name="3"></a></h2><pre class="codeinput">facerecog1_kalpesh
+</pre><pre class="codeoutput"> 
+Reading in the images...
+[1/40][2/40][3/40][4/40][5/40][6/40][7/40][8/40][9/40][10/40][11/40][12/40][13/40][14/40][15/40][16/40][17/40][18/40][19/40][20/40][21/40][22/40][23/40][24/40][25/40][26/40][27/40][28/40][29/40][30/40][31/40][32/40][33/40][34/40][35/40][36/40][37/40][38/40][39/40][40/40]
+Zero mean
+PCA
+Normalising
+Creating lower dimensional subspace
+Projecting all images onto a new lower dimensional subspace
+Reading in the images...
+[1/40][2/40][3/40][4/40][5/40][6/40][7/40][8/40][9/40][10/40][11/40][12/40][13/40][14/40][15/40][16/40][17/40][18/40][19/40][20/40][21/40][22/40][23/40][24/40][25/40][26/40][27/40][28/40][29/40][30/40][31/40][32/40][33/40][34/40][35/40][36/40][37/40][38/40][39/40][40/40]
+
+trainMSE =
+
+    7.9843
+
+
+testMSE =
+
+  397.7429
+
+
+myImgMSE =
+
+   1.4414e+03
+
+</pre><img vspace="5" hspace="5" src="main_all_01.png" alt=""> <img vspace="5" hspace="5" src="main_all_02.png" alt=""> <img vspace="5" hspace="5" src="main_all_03.png" alt=""> <img vspace="5" hspace="5" src="main_all_04.png" alt=""> <img vspace="5" hspace="5" src="main_all_05.png" alt=""> <p>We can notice that MSE in training image is very low compared to that of test image and myImg. Training image belong to the same space for which Principal Components were extracted. Since it is the best low rank approximation of training image, the error is indeed quite low. Also the reconstructed face image is almost similar to the original image. Test image do not belong the same space, but it still contain faces with similar backgrounds, lightening conditions etc. Hence it still be explained with Principal components of training data upto some extenct. The error is found to be greater that train image but lesser than myImg, which is expected. We can also compare reconstructed faces. Reconstruction is worse than training image but better than myImg. MyImg neither belongs training space, nor does to a similar space. The background, lightening conditions etc are drastically different. Hence the error is very large and reconstruction is worst amongst all</p><p>Also note the plots of eigenvalues and eigenfaces. Last few eigenvalues are very low compared to initial eigenvalues. Higher value in the plot implies more important (principal) component. Eigenfaces have struture similar to faces, but they are not faces of a particular individual, rather a combination of all faces which represents particular eigenvector.</p><h2>Q4 and Q5<a name="6"></a></h2><p>Only 100 principal components</p><pre class="codeinput">facerecog2_kalpesh
+</pre><pre class="codeoutput"> 
+Reading in the images...
+[1/40][2/40][3/40][4/40][5/40][6/40][7/40][8/40][9/40][10/40][11/40][12/40][13/40][14/40][15/40][16/40][17/40][18/40][19/40][20/40][21/40][22/40][23/40][24/40][25/40][26/40][27/40][28/40][29/40][30/40][31/40][32/40][33/40][34/40][35/40][36/40][37/40][38/40][39/40][40/40]
+Zero mean
+PCA
+Normalising
+Creating lower dimensional subspace
+Projecting all images onto a new lower dimensional subspace
+Reading in the images...
+[1/40][2/40][3/40][4/40][5/40][6/40][7/40][8/40][9/40][10/40][11/40][12/40][13/40][14/40][15/40][16/40][17/40][18/40][19/40][20/40][21/40][22/40][23/40][24/40][25/40][26/40][27/40][28/40][29/40][30/40][31/40][32/40][33/40][34/40][35/40][36/40][37/40][38/40][39/40][40/40]
+
+trainMSE =
+
+  117.4848
+
+
+testMSE =
+
+  431.0048
+
+
+myImgMSE =
+
+   1.6233e+03
+
+</pre><img vspace="5" hspace="5" src="main_all_06.png" alt=""> <img vspace="5" hspace="5" src="main_all_07.png" alt=""> <img vspace="5" hspace="5" src="main_all_08.png" alt=""> <img vspace="5" hspace="5" src="main_all_09.png" alt=""> <img vspace="5" hspace="5" src="main_all_10.png" alt=""> <p>The error pattern is still the same (train &lt; test &lt; myImg). But we observe increase in training error, because we have used less number of (100 instead of 200 as in earlier case) principal components. Thishas caused more error in training image. The increase in the error of test image and myImg is low compared to increase in the error of train image (proportion wise increase). Test image and myImg didn't belong to the space, hence error didn't increase by that much amount as it has increased in case of training image.</p><h2>Q6.<a name="8"></a></h2><p>Trick used in the paper: Instead of calculating eigenvectors of XX', they claculated eigenvectors for X'X. (X is zeroMeanSpace matrix).</p><p>Modification and Justification: X is 10304 by 200 matrix. I tried calculating actual eigenvectors of XX', which is a huge (10304*10304) matrix. My PC wasn't able to compute that matrix due to unsufficient RAM. This computation might be possible if we have sufficient computing power. As the paper justifies correctly, it is not necessary to calculate eigenvectors of XX', we can manage with eigenvectors of X'X because rank of matrix X is maximum 200 and hence other singular values will be zero. Therefore there is not point in computing vectors corresponding to them, because it is anyway going to be nullified.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% EE779: PCA_assignment
+%% Kalpesh Patil (130040019)
+% Note that some unnecessary print statements in the original
+% implementation file of PCA have incresed length of the report. Ignore
+% them.
+
+%% Q1 and Q2
+% Required data was downloded. Code was studied to understand PCA implementation. 
+
+%% Q3 and Q5
+facerecog1_kalpesh
+%%
+% We can notice that MSE in training image is very low compared to that of
+% test image and myImg. Training image belong to the same space for which
+% Principal Components were extracted. Since it is the best low rank
+% approximation of training image, the error is indeed quite low. Also the
+% reconstructed face image is almost similar to the original image. Test
+% image do not belong the same space, but it still contain faces with
+% similar backgrounds, lightening conditions etc. Hence it still be 
+% explained with Principal components of training data upto some extenct.
+% The error is found to be
+% greater that train image but lesser than myImg, which is expected. We
+% can also compare reconstructed faces. Reconstruction is worse than
+% training image but better than myImg.
+% MyImg neither belongs training space, nor does to a similar space. The
+% background, lightening conditions etc are drastically different. Hence
+% the error is very large and reconstruction is worst amongst all
+
+%%
+% Also note the plots of eigenvalues and eigenfaces. Last few eigenvalues
+% are very low compared to initial eigenvalues. Higher value in the plot
+% implies more important (principal) component. Eigenfaces have struture
+% similar to faces, but they are not faces of a particular individual,
+% rather a combination of all faces which represents particular
+% eigenvector. 
+
+%% Q4 and Q5
+% Only 100 principal components
+facerecog2_kalpesh
+%% 
+% The error pattern is still the same (train < test < myImg).
+% But we observe increase in training error, because we have used less
+% number of (100 instead of 200 as in earlier case) principal components.
+% Thishas caused more error in training image. The increase in the error of
+% test image and myImg is low compared to increase in the error of train
+% image (proportion wise increase). Test image and myImg didn't belong to
+% the space, hence error didn't increase by that much amount as it has
+% increased in case of training image. 
+
+
+%% Q6. 
+
+%% 
+% Trick used in the paper: 
+% Instead of calculating eigenvectors of XX', they claculated eigenvectors
+% for X'X. (X is zeroMeanSpace matrix). 
+%%
+% Modification and Justification:
+% X is 10304 by 200 matrix. I tried
+% calculating actual eigenvectors of XX', which is a huge (10304*10304)
+% matrix. My PC wasn't able to compute that matrix due to unsufficient RAM.
+% This computation might be possible if we have sufficient computing power. As
+% the paper justifies correctly, it is not necessary to calculate
+% eigenvectors of XX', we can manage with eigenvectors of X'X because rank
+% of matrix X is maximum 200 and hence other singular values will be zero.
+% Therefore there is not point in computing vectors corresponding to them,
+% because it is anyway going to be nullified.
+##### SOURCE END #####
+--></body></html>
